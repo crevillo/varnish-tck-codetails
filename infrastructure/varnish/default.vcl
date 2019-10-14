@@ -20,6 +20,11 @@ backend default {
 }
 
 sub vcl_recv {
+    // Don't cache requests other than GET and HEAD.
+    if (req.method != "GET" && req.method != "HEAD") {
+            return (pass);
+    }
+
     if (req.http.uri) {
         ban("obj.http.uri ~ " + req.http.uri);
         return (synth(200, "Banned"));
