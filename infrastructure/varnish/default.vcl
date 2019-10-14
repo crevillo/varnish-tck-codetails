@@ -29,6 +29,12 @@ sub vcl_recv {
 }
 
 sub vcl_backend_response {
+     if (bereq.url ~ "/assets") {
+            unset beresp.http.set-cookie;
+            set beresp.http.cache-control = "public, max-age=259200";
+            set beresp.ttl = 3d;
+            return (deliver);
+     }
 }
 
 sub vcl_deliver {
