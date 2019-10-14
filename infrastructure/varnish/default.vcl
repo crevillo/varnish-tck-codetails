@@ -20,6 +20,11 @@ backend default {
 }
 
 sub vcl_recv {
+    if (req.http.uri) {
+        ban("obj.http.uri ~ " + req.http.uri);
+        return (synth(200, "Banned"));
+    }
+
     return (hash);
 }
 
